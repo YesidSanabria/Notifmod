@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Notifmod implements ModInitializer {
+
 	public static final String MOD_ID = "notifmod";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("notifmod");
@@ -17,7 +18,7 @@ public class Notifmod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ModItems.registerItems();
+		ModItems.registerModItems();
 
 		ServerLifecycleEvents.SERVER_STARTING.register(server -> SERVER = server);
 		ServerLifecycleEvents.SERVER_STOPPING.register(server -> SERVER = null);
