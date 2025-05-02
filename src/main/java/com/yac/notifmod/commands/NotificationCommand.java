@@ -1,47 +1,51 @@
 package com.yac.notifmod.commands;
 
-
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.yac.notifmod.Notifmod;
+import com.yac.notifmod.networking.payload.OakCallPayload; // Importa tu nuevo payload
+
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+// Quita la importación de PacketByteBufs si ya no la usas aquí
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.function.CommandFunctionManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-
-import static org.apache.commons.compress.harmony.pack200.PackingUtils.log;
+// Ya no necesitas importar Identifier aquí si solo usas el ID del Payload
+// Ya no necesitas importar PacketByteBufs aquí
 
 public class NotificationCommand {
 
-    public NotificationCommand() { throw new AssertionError(); }
+    // Ya no necesitamos el Identifier aquí, lo define el Payload
 
     public static void register() {
-        log("Registering Commmands");
-
-        Command<ServerCommandSource> command = context -> {
-            ServerCommandSource source = context.getSource();
-            return 0;
-        };
+        Notifmod.LOGGER.info("Registrando Comandos para " + Notifmod.MOD_ID);
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
         {
-            //CommandManager.literal("calldexcom") - > Como se llama al comando desde el juego
             dispatcher.register(CommandManager.literal("calldexcom")
-                            .then(CommandManager.argument("clear_operation_type", StringArgumentType.string())
-                    .executes(context -> {
-                        //Logica del comando
-                        context.getSource().sendFeedback(() -> Text.literal("Se llamo /calldexcom."), false);
-                        String typ = StringArgumentType.getString(context, "clear_operation_type");
-                        return 1;
-                    })));
+                    .requires(source -> source.hasPermissionLevel(2))
+                    .executes(NotificationCommand::run)
+            );
         });
-
     }
 
+    private static int run(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity player = source.getPlayer();
 
+        if (player != null) {
+            // --- CORRECCIÓN: Enviar una instancia del Payload ---
+            ServerPlayNetworking.send(player, new OakCallPayload()); // Simplemente crea y envía el objeto payload
 
-
-
+            source.sendFeedback(() -> Text.literal("¡Señal de llamada enviada!"), false);
+            return Command.SINGLE_SUCCESS;
+        } else {
+            source.sendError(Text.literal("Este comando solo puede ser ejecutado por un jugador."));
+            return 0;
+        }
+    }
 }
 
 
