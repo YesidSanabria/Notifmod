@@ -30,6 +30,11 @@ loom {
 
 }
 
+//Dependencia para Brigadier Comandos
+/*maven {
+	url "https://libraries.minecraft.net"
+}*/
+
 fabricApi {
 	configureDataGeneration {
 		client = true
@@ -38,7 +43,7 @@ fabricApi {
 
 dependencies {
 	minecraft "com.mojang:minecraft:1.21.1"
-
+	//compile 'com.mojang:brigadier:(the latest version)'
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -96,3 +101,4 @@ publishing {
 		// retrieving dependencies.
 	}
 }
+

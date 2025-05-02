@@ -1,5 +1,6 @@
 package com.yac.notifmod;
 
+import com.yac.notifmod.commands.NotificationCommand;
 import com.yac.notifmod.items.ModItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -19,6 +20,7 @@ public class Notifmod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModItems.registerModItems();
+		NotificationCommand.register();
 
 		ServerLifecycleEvents.SERVER_STARTING.register(server -> SERVER = server);
 		ServerLifecycleEvents.SERVER_STOPPING.register(server -> SERVER = null);
