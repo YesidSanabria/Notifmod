@@ -1,0 +1,8 @@
+{
+  "oak_call_ringtone": {
+    "subtitle": "subtitles.notifmod.oak_call_ringtone",
+    "sounds": [
+      "notifmod:/ringtone"
+    ]
+  }
+}

@@ -37,7 +37,8 @@ public class NotificationCommand {
 
         if (player != null) {
             // --- CORRECCIÓN: Enviar una instancia del Payload ---
-            ServerPlayNetworking.send(player, new OakCallPayload()); // Simplemente crea y envía el objeto payload
+            String playerName = player.getName().getString(); // Obtiene el nombre del jugador
+            ServerPlayNetworking.send(player, new OakCallPayload(playerName)); // Crea el payload CON el nombre
 
             source.sendFeedback(() -> Text.literal("¡Señal de llamada enviada!"), false);
             return Command.SINGLE_SUCCESS;
